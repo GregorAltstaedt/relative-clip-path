@@ -56,6 +56,20 @@ const examples = {
 };
 
 const PathConverter = function (params) {
+  this.improvedPathMetrics = {
+    realSize: {
+      x: 0,
+      y: 0,
+    },
+    minXY: {
+      x: Number.POSITIVE_INFINITY,
+      y: Number.POSITIVE_INFINITY,
+    },
+    maxXY: {
+      x: Number.NEGATIVE_INFINITY,
+      y: Number.NEGATIVE_INFINITY,
+    }
+  }
   this.srcTextElem = params.srcTextElem;
   this.resultTextElem = params.resultTextElem;
   const demoTargetElem = params.demoTargetElem;
@@ -178,6 +192,61 @@ PathConverter.prototype.addExamples = function () {
   examplesWrapper.classList.remove('visuallyhidden');
 }
 
+PathConverter.prototype.findMinMaxAndDimensionOfSvgPath = function (srcCoordsList) {
+  let realSize = {
+    x: 0,
+    y: 0,
+  }
+  let minXY = {
+    x: Number.POSITIVE_INFINITY,
+    y: Number.POSITIVE_INFINITY,
+  }
+  let maxXY = {
+    x: Number.NEGATIVE_INFINITY,
+    y: Number.NEGATIVE_INFINITY,
+  }
+
+  for (let cordList of srcCoordsList) {
+    let value = cordList
+    let { commandSrc, command, coordsList, keysList } = parseCoordsItem(value);
+    // eg.: "L", "l", [324.022, 442.651], ['x', 'y']
+
+    // TODO: might not be right to do this for all coords.
+    // the original .findOffset function seems to make some exceptions
+    coordsList.forEach((coord, index) => {
+      if (index % 2 === 0) {
+        // x
+        if (coord > maxXY.x) {
+          maxXY.x = coord;
+        }
+        if (coord < minXY.x) {
+          minXY.x = coord;
+        }
+      }
+      else {
+        // y
+        if (coord > maxXY.y) {
+          maxXY.y = coord;
+        }
+        if (coord < minXY.y) {
+          minXY.y = coord;
+        }
+      }
+    })
+  }
+
+  realSize = {
+    x: maxXY.x - minXY.x,
+    y: maxXY.y - minXY.y,
+  }
+
+  this.improvedPathMetrics = {
+    realSize,
+    minXY,
+    maxXY,
+  }
+  // console.log( this.improvedPathMetrics )
+}
 
 
 // ---------------------------------------------
@@ -200,6 +269,9 @@ PathConverter.prototype.updateView = function () {
   let coordsList = coordsListSrc.slice();
   // Add omitted commands for more correct parsing
   coordsList = this.addOmittedCommands(coordsListSrc.slice());
+
+  // TODO: before of after the addOmittedCommands? 
+  this.findMinMaxAndDimensionOfSvgPath(coordsList.slice())
 
   if(this.isRemoveOffset) {
     // Remove path offset
@@ -640,6 +712,12 @@ PathConverter.prototype.transformValuesByKeys = function (keysList, coordsList, 
 
 // ---------------------------------------------
 
+/**
+ * 
+ * @param {string} key 
+ * @param {number} value 
+ * @returns 
+ */
 PathConverter.prototype.getTransformedByKey = function (key = 'height', value) {
   let result = 0;
 
