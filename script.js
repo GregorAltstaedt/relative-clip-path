@@ -642,16 +642,12 @@ PathConverter.prototype.transformValuesByKeys = function (keysList, coordsList, 
 
 PathConverter.prototype.getTransformedByKey = function (key = 'height', value) {
   let result = 0;
+
   if(key === 'width') {
-    result = round(value/this.pathSizes.width);
+    result = value / this.pathSizes.width;
   }
   else {
-    result = round(value/this.pathSizes.height);
-  }
-
-  // Reduce of maximum coordinates to 1
-  if(result > 1) {
-    result = Math.floor(result);
+    result = value / this.pathSizes.height;
   }
 
   return result;
@@ -748,10 +744,4 @@ function normalizePathCoords(coords) {
   }
 
   return result;
-}
-
-// ---------------------------------------------
-
-function round(num) {
-  return Math.round(num * 1000) / 1000;
 }
