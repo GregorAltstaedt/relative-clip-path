@@ -735,7 +735,8 @@ PathConverter.prototype.getTransformedByKey = function (key = 'height', value) {
     }
   }
 
-  return result;
+  // only accept 4 decimal places
+  return result.toPrecision(4);
 }
 
 
