@@ -1,0 +1,13 @@
+{
+  "name": "relative-clip-path-master",
+  "version": "1.0.0",
+  "description": "The converter is just preparing SVG path to be used in CSS clip-path.",
+  "main": "script.js",
+  "type":"module",
+  "scripts": {
+    "start": "vite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
