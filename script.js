@@ -721,11 +721,18 @@ PathConverter.prototype.transformValuesByKeys = function (keysList, coordsList, 
 PathConverter.prototype.getTransformedByKey = function (key = 'height', value) {
   let result = 0;
 
-  if(key === 'width') {
-    result = value / this.pathSizes.width;
-  }
-  else {
-    result = value / this.pathSizes.height;
+  if (key === 'width') {
+    if (!this.isRemoveOffset) {
+      result = value / this.pathSizes.width;
+    } else {
+      result = value / this.improvedPathMetrics.realSize.x;
+    }
+  } else {
+    if (!this.isRemoveOffset) {
+      result = value / this.pathSizes.height;
+    } else {
+      result = value / this.improvedPathMetrics.realSize.y;
+    }
   }
 
   return result;
