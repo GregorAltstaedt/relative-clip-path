@@ -832,3 +832,12 @@ function normalizePathCoords(coords) {
 
   return result;
 }
+
+
+
+const pathConverter = new PathConverter({
+  srcTextElem: document.getElementById('src-text'),
+  resultTextElem: document.getElementById('result-text'),
+  demoTargetElem: document.querySelector('.result'),
+  addExamples: true
+});

@@ -3,7 +3,10 @@
 
 <head>
   <title>Clip-path converter</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- has to be adjusted on the server. Add "/clip-path-converter" in front of /assets/... -->
+  <link rel="stylesheet" href="/src/style.css">
+  <script type="module" src="/src/script.js"></script>
 </head>
 
 <body>
@@ -173,16 +176,6 @@
       </div>
     </div>
   </template>
-
-  <script src="script.js"></script>
-  <script>
-    const pathConverter = new PathConverter({
-      srcTextElem: document.getElementById('src-text'),
-      resultTextElem: document.getElementById('result-text'),
-      demoTargetElem: document.querySelector('.result'),
-      addExamples: true
-    });
-  </script>
 
 </body>
 
