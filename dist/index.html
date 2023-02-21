@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Clip-path converter</title>
+  
+  <script src="./script.js"></script>
+  <link rel="stylesheet" href="/assets/index-8bce0f09.css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <header class="page-header">
+      <h1>Convert SVG absolute clip-path to relative</h1>
+    </header>
+
+    <main class="main">
+      <section class="section">
+        <h2 class="visuallyhidden">Codes</h2>
+
+        <div class="container">
+          <header class="container__header">
+            <h3>
+              <label for="src-text">
+                Insert clip-path coordinates for <code>userSpaceOnUse</code>:
+              </label>
+            </h3>
+          </header>
+
+          <textarea id="src-text" placeholder="M 20,20 h 160 v 160 h -80 v -80 h -80 z" spellcheck="false"></textarea>
+        </div>
+
+        <div class="container">
+          <header class="container__header">
+            <h3>
+              <label for="result-text">
+                Take clip-path coordinates for <code>objectBoundingBox</code>:
+              </label>
+            </h3>
+
+            <label class="container__label">
+              <input type="checkbox" checked id="remove-offsets-control">
+              Remove offset
+            </label>
+          </header>
+
+          <textarea id="result-text" placeholder="" spellcheck="false"></textarea>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="">Live demos</h2>
+
+        <div class="result"></div>
+      </section>
+
+      <section class="section">
+        <h2 class="">All together now</h2>
+
+        <div class="full-codes">
+          <div class="
+              full-codes__item">
+            <h3>
+              <label for="css-code">CSS</label>
+            </h3>
+            <textarea id="css-code" class="
+                  full-codes__css-code"></textarea>
+
+            <h3>
+              <label for="html-code">SVG + HTML</label>
+            </h3>
+            <textarea id="html-code" class="
+                  full-codes__html-code"></textarea>
+          </div>
+
+          <div class="
+              full-codes__result
+              full-codes__item">
+            <style>
+              .svg {
+                position: absolute;
+                width: 0;
+                height: 0;
+              }
+
+              .clipped {
+                width: 100%;
+                height: 350px;
+                background: turquoise url(https://source.unsplash.com/600x600?summer);
+                background-size: cover;
+                -webkit-clip-path: url(#my-clip-path);
+                clip-path: url(#my-clip-path);
+              }
+            </style>
+
+            <svg class="svg">
+              <clipPath id="my-clip-path" clipPathUnits="objectBoundingBox">
+                <path d="M0.5,0, L1,1, H0"></path>
+              </clipPath>
+            </svg>
+
+            <div class="clipped"></div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="">About</h2>
+
+        <p>The converter is just preparing SVG path to be used in CSS clip-path.</p>
+
+        <p>If we'll take a path from editor or ordinary SVG icon, it'll have absolute coordinates and <a
+            href="https://codepen.io/yoksel/pen/QWWWRqv">will not be stretched</a>. There are some <a
+            href="https://twitter.com/AlaricBaraou/status/1180958279570280448">funny</a> <a
+            href="https://twitter.com/paullebeau/status/1181169153287155712">hacks</a> to solve this problem, but I
+          think, it will be easier to translate coordinates from absolute to relative and just use path.</p>
+
+        <p>Read about clip-path:</p>
+
+        <ul>
+          <li>
+            <a href="https://developer.mozilla.org/ru/docs/Web/CSS/clip-path">Clip-path on MDN</a>
+          </li>
+          <li>
+            <a href="https://css-tricks.com/clipping-clipping-and-more-clipping/">Clipping, Clipping, and More
+              Clipping!</a>
+          </li>
+          <li>
+            <a href="https://css-tricks.com/animating-with-clip-path/">Animating with Clip-Path</a>
+          </li>
+          <li>
+            <a href="https://css-tricks.com/tag/clip-path/">and more...</a>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <a href="https://github.com/yoksel/relative-clip-path/">Project on GitHub</a>
+      <a href="https://twitter.com/yoksel_en">@yoksel_en</a>
+    </footer>
+  </div>
+
+  <template id="demos-tmpl">
+    <div class="demos">
+      <div class="demos__svg-container">
+        <svg>
+          <clipPath id="clip-path-before" clipPathUnits="userSpaceOnUse"></clipPath>
+          <clipPath id="clip-path-after" clipPathUnits="objectBoundingBox"></clipPath>
+        </svg>
+      </div>
+
+      <div class="demos__item">
+        <h3>Svg with initial path</h3>
+        <div class="src-container">
+          <svg>
+
+          </svg>
+        </div>
+      </div>
+
+      <div class="demos__item">
+        <h3>Clip-path with initial path</h3>
+        <div class="demo">
+          <div class="demo__target demo__target--before"></div>
+        </div>
+      </div>
+
+      <div class="demos__item">
+        <h3>Clip-path with relative path</h3>
+        <div class="demo">
+          <div class="demo__target demo__target--after"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    const pathConverter = new PathConverter({
+      srcTextElem: document.getElementById('src-text'),
+      resultTextElem: document.getElementById('result-text'),
+      demoTargetElem: document.querySelector('.result'),
+      addExamples: true
+    });
+  </script>
+</body>
+
+</html>
